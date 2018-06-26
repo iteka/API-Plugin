@@ -1,5 +1,7 @@
-var db = require('../config/dbconf');
+var request = require('request');
+const db = require('../controllerts/database');
 var ObjectId = require('mongodb').ObjectID;
+//
 
 exports.all = function (cd) {
     db.get().collection('consoles').find().toArry(function (err, docs){
@@ -33,6 +35,30 @@ exports.update = function (id, status, cd) {
   )
 }
 
+exports.CreateVpnKey = function(key, url, cd) {
+  request({
+    url: `${url}/api/gencli/`,
+    method: "POST",
+    json: {
+      srv: "inet",
+      cli: key
+    }
+  }, function(err, httpResponse, body) {
+        if (body.sucess === false) {
+          return cd(body, httpResponse);
+        }
+        cd(err);
+  })
+}
+
+exports.GetVpnKey = function (key, url, cd) {
+  request.get(`${url}/api/ovpn/${key}@inet`, function(err, httpResponse, body) {
+    if (body.sucess === false) {
+      return cd(err);
+    }
+    cd(body);
+  })
+}
 
 
 

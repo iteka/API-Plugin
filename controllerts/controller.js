@@ -56,7 +56,7 @@ exports.createVpncredentials = function (req, res) {
 }
 
 exports.update = function (req, res) {
-  Models.update(req.params.id, cetch, function (err, result) {
+  Models.update(req.params.id, false, function (err, result) {
     if (err){
       console.log(err);
       return res.sendStatus(500);

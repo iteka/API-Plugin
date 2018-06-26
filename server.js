@@ -1,15 +1,17 @@
 const express = require('express');
 const BodyPparser = require('body-parser');
-var db = require('./config/dbconf');
-var Controller = require('./controllerts/controller');
-var Services = require('./services/services');
+const db = require('./controllerts/database');
+const Controller = require('./controllerts/controller');
+const Services = require('./services/services');
+const config = require('./config');
 
 var app = express();
+
 app.use(BodyPparser.json());
 app.use(BodyPparser.urlencoded({ extended:true }));
 
 app.get('/', function (req, res) {
-  res.send('HI API');
+  res.send('Access Denied');
 })
 
 
@@ -25,11 +27,11 @@ app.post('/createdemo', Services.CreateDemo);
 // app.put('/update/:id', Controller.update);
 
 
-db.connect('mongodb://localhost/IT-API', function (err) {
+db.connect(config.url.Mongo, function (err) {
     if(err){
       return console.log(err);
     }
-    app.listen(3000, function () {
+    app.listen(322, function () {
       console.log('API Started');
     })
 })
