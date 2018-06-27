@@ -1,0 +1,9 @@
+{
+
+  "url": {
+    "vpn" : "http://10.1.0.1",
+    "Mongo" : "mongodb://localhost/IT-API"
+  },
+  "db" : "IT-API"
+
+}
