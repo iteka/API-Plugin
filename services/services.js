@@ -11,30 +11,46 @@ var Dates = new Date().toISOString();
 exports.CreateDemo = function(req, res) {
   var IDconsole = req.body.console, UID = req.body.uid;
 
-  Models.CreateVpnKey(`key${UID}`, Config.url.vpn, function(data) {
-    if(data !== null){
-        return console.log("ERR --", data);
+  // Models.CreateVpnKey(`key${UID}`, Config.url.vpn, function(data) {
+  //   if(data !== null){
+  //       return console.log("ERR --", data);
+  //   }
+  //   Models.GetVpnKey(`key${UID}`, Config.url.vpn, function(body) {
+  //     if (body.err) {
+  //       return console.log("ERR --", body);
+  //       return res.sendStatus(500);
+  //     }
+  //
+  //     var vpn = {
+  //       "vpnCredentials": body,
+  //       "user": ObjectId(UID)
+  //     };
+  //
+  //     Models.vpncredentials(vpn, function(err, result) { // создаем юзеру vpncredentials
+  //       if (err) {
+  //         console.log(err);
+  //         return res.sendStatus(500);
+  //       }
+  //       //  res.send(vpn);
+  //     })
+  //   })
+  // })
+var TestKey = "-----BEGIN CERTIFICATE---MIIFMDCCBBigAwIBAgIJALpzyMTRPPmAMA0GCSqGSIb3DQEBCwUAMIHAMQswCQYD-----END CERTIFICATE-----"
+
+  var vpn = {
+    "vpnCredentials": TestKey,
+    "user": ObjectId(UID)
+  };
+
+  Models.vpncredentials(vpn, function(err, result) { // создаем юзеру vpncredentials
+    if (err) {
+      console.log(err);
+      return res.sendStatus(500);
     }
-    Models.GetVpnKey(`key${UID}`, Config.url.vpn, function(body) {
-      if (body.err) {
-        return console.log("ERR --", body);
-        return res.sendStatus(500);
-      }
 
-      var vpn = {
-        "vpnCredentials": body,
-        "user": ObjectId(UID)
-      };
 
-      Models.vpncredentials(vpn, function(err, result) { // создаем юзеру vpncredentials
-        if (err) {
-          console.log(err);
-          return res.sendStatus(500);
-        }
-        //  res.send(vpn);
-      })
-    })
-  })
+
+
 
   var Subscripts = {
     "start_date": Dates,
