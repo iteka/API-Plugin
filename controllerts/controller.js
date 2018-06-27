@@ -13,6 +13,16 @@ exports.all = function (req, res) {
     })
 }
 
+exports.FindConsole = function (req, res) {
+    Models.FindConsole(req.params.id, function (err, doc) {
+      if(err){
+        console.log(err);
+        return res.sendStatus(500);
+      }
+      res.send(doc);
+    })
+}
+
 exports.findID = function (req, res) {
     Models.findID(req.params.id, function (err, doc) {
       if(err){
@@ -22,6 +32,7 @@ exports.findID = function (req, res) {
       res.send(doc);
     })
 }
+
 
 exports.createSubscript = function (req, res) {
   var Subscripts = {

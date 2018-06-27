@@ -19,6 +19,8 @@ app.post('/createdemo', Services.CreateDemo);
 
 app.post('/payments', Controller.Payments);
 
+app.get('/find/:id', Controller.FindConsole);
+
 // app.get('/consoles/:id', Controller.findID);
 //
 // app.post('/vpncredentials', Controller.createVpncredentials);

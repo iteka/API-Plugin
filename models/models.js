@@ -15,6 +15,12 @@ exports.findID = function (id, cd) {
     })
 }
 
+exports.FindConsole = function (id, cd) {//поиск консолей с consoleGroup
+  db.get().collection('consoles').findOne({consoleGroup: ObjectId(id), available: true}, function (err, doc) {
+      cd(err, doc);
+    })
+}
+
 exports.createSubscript = function (subscript, cd) {
   db.get().collection('subscriptions').insert(subscript, function(err, docs) {
     cd(err, docs);

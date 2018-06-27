@@ -9,7 +9,8 @@ var Dates = new Date().toISOString();
 
 
 exports.CreateDemo = function(req, res) {
-  var IDconsole = req.body.console, UID = req.body.uid;
+  var consoleGroup = req.body.consoleGroup,
+    UID = req.body.uid;
 
   // Models.CreateVpnKey(`key${UID}`, Config.url.vpn, function(data) {
   //   if(data !== null){
@@ -35,7 +36,8 @@ exports.CreateDemo = function(req, res) {
   //     })
   //   })
   // })
-var TestKey = "-----BEGIN CERTIFICATE---MIIFMDCCBBigAwIBAgIJALpzyMTRPPmAMA0GCSqGSIb3DQEBCwUAMIHAMQswCQYD-----END CERTIFICATE-----"
+
+  var TestKey = "-----BEGIN CERTIFICATE---MIIFMDCCBBigAwIBAgIJALpzyMTRPPmAMA0GCSqGSIb3DQEBCwUAMIHAMQswCQYD-----END CERTIFICATE-----";
 
   var vpn = {
     "vpnCredentials": TestKey,
@@ -47,44 +49,50 @@ var TestKey = "-----BEGIN CERTIFICATE---MIIFMDCCBBigAwIBAgIJALpzyMTRPPmAMA0GCSqG
       console.log(err);
       return res.sendStatus(500);
     }
+    console.log("Vpncredentials: OK");
+    var Subscripts = {
+      "start_date": Dates,
+      "end_date": Dates,
+      "active": true,
+      "console": ObjectId(req.body.console),
+      "consolegroup": ObjectId(req.body.consolegroup),
+      "user": ObjectId(UID)
+    };
+
+    Models.createSubscript(Subscripts, function(err, result) { // создаем subscriptions
+      if (err) {
+        console.log(err);
+        return res.sendStatus(500);
+      }
+      console.log("Subscripts: OK");
+      Models.FindConsole(consoleGroup, function(err, doc) {
+        if (doc === null) {
+          console.log(err);
+          return res.sendStatus(500);
+        }
+        console.log("ConsoleGroup: OK");
+        Models.updateConsole(doc.id, false, function(err, result) { // резервируем консоль
+          if (err) {
+            console.log(err);
+            return res.sendStatus(500);
+          }
+          console.log("DEMO CREATE: OK");
+          res.sendStatus(200);
+        })
+      })
+
+    })
 
 
 
-
-
-  var Subscripts = {
-    "start_date": Dates,
-    "end_date": Dates,
-    "active": true,
-    "console": ObjectId(req.body.console),
-    "consolegroup": ObjectId(req.body.consolegroup),
-    "user": ObjectId(UID)
-  };
-
-  Models.createSubscript(Subscripts, function(err, result) {// создаем subscriptions
-    if (err) {
-      console.log(err);
-      return res.sendStatus(500);
-    }
-    //  res.send(Subscripts);
-  })
-
-  Models.updateConsole(IDconsole, false, function(err, result) {// резервируем консоль
-    if (err) {
-      console.log(err);
-      return res.sendStatus(500);
-    }
-    res.sendStatus(200);
-  })
-
+  });
 };
 
 
 
 
-exports.PayInit = function (req, res) {
-  Controller.updateConsole(req.id);// Резерв консоли
+exports.PayInit = function(req, res) {
+  Controller.updateConsole(req.id); // Резерв консоли
 }
 
-exports.UserPay = function (req, res) {
-}
+exports.UserPay = function(req, res) {}
