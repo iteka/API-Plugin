@@ -33,6 +33,14 @@ exports.vpncredentials = function (vpn, cd) {
   })
 }
 
+exports.UpdateVpncredentials = function (id, Pstatus, cd) {
+  db.get().collection('payments').updateOne({ _id: ObjectId(id) },  { $set:{ status: Pstatus }},
+    function (err, result) {
+      cd(err, result);
+    }
+  )
+} //ERRRRRR НАДО ДОДЕЛАТЬ
+
 exports.updateConsole = function (id, status, cd) {
   db.get().collection('consoles').updateOne({ _id: ObjectId(id) },  { $set:{ available: status }},
     function (err, result) {
@@ -72,7 +80,16 @@ exports.Payments = function (payments, cd) {
   })
 }
 
+exports.PaymentsUpdate = function (id, Pstatus, cd) {
+  db.get().collection('payments').updateOne({ _id: ObjectId(id) },  { $set:{ status: Pstatus }},
+    function (err, result) {
+      cd(err, result);
+    }
+  )
+}
 
-
-
-//
+exports.PaymenTtypes = function (id, cd) {
+  db.get().collection('paymenttypes').findOne({ _id: ObjectId(id) }, function(err, docs) {
+    cd(err, docs);
+  })
+}

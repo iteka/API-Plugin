@@ -4,6 +4,10 @@
     "vpn" : "http://10.1.0.1",
     "Mongo" : "mongodb://localhost/IT-API"
   },
-  "db" : "IT-API"
+  "db" : "IT-API",
+  "pay" : {
+    "qiwi" : "79653256605",
+    "qkey" : "1ceba7dbc0d18ac79c24ae3cd49d6623"
+  }
 
 }

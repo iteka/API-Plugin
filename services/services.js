@@ -88,11 +88,58 @@ exports.CreateDemo = function(req, res) {
   });
 };
 
+exports.CreateUser = function(req, res) {
 
+  function makeid() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (var i = 0; i < 8; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
+  }
 
+  console.log(req.body);
+  request({
+      url: `http://localhost:1337/auth/local/register`,
+      method: "POST",
+      json: {
+        "username": req.body.username,
+        "email": req.body.email,
+        "password": makeid()
+      }
+    },
+    function(err, httpResponse, body) {
+      if (httpResponse.statusCode !== 200) {
+        console.log("CreateUser Error", httpResponse.statusCode);
+        return res.send(httpResponse.statusCode);
+      }
+      console.log("USERID ", body.user._id);
+      console.log("jwt ", body.jwt);
+      res.send(body.jwt);
+      //   Models.CreateVpnKey(`key${body.user._id}`, Config.url.vpn, function(data) {
+      // res.send(body.jwt);
+      //  })
 
-exports.PayInit = function(req, res) {
-  Controller.updateConsole(req.id); // Резерв консоли
+    })
 }
 
-exports.UserPay = function(req, res) {}
+exports.NotiFy = function (req, res) {
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//

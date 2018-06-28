@@ -14,7 +14,8 @@ exports.all = function (req, res) {
 }
 
 exports.FindConsole = function (req, res) {
-    Models.FindConsole(req.params.id, function (err, doc) {
+  console.log(req.body.id);
+    Models.FindConsole(req.body.id, function (err, doc) {
       if(err){
         console.log(err);
         return res.sendStatus(500);
@@ -32,7 +33,6 @@ exports.findID = function (req, res) {
       res.send(doc);
     })
 }
-
 
 exports.createSubscript = function (req, res) {
   var Subscripts = {
@@ -76,24 +76,6 @@ exports.updateConsole = function (req, res) {
   })
 }
 
-exports.Payments = function (req, res) {
-  var payments = {
-    "status" : req.params.status,
-    "consoleGroup" :ObjectId(req.params.consoleGroup),
-    "paymentType" : ObjectId(req.params.paymentType),
-    "user" : ObjectId(req.params.user),
-    "subscription" : ObjectId(req.params.subscription),
-  }
-  Models.Payments(payments, function (err, doc) {
-    if (err){
-      console.log(err);
-      return res.sendStatus(500);
-    }
-    res.send(doc);
-  //  res.sendStatus(200);
-  })
-
-}
 
 
 

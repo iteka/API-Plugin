@@ -11,8 +11,16 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "consolidate": "^0.15.1",
     "express": "^4.16.3",
     "mongodb": "^3.0.10",
+    "mustache": "^2.3.0",
+    "node-machine-id": "^1.1.10",
     "request": "^2.87.0"
+  },
+  "devDependencies": {
+    "console-error": "0.0.4",
+    "console-info": "0.0.5",
+    "console-warn": "0.0.4"
   }
 }
