@@ -1,0 +1,13 @@
+{
+
+  "url": {
+    "vpn" : "http://10.1.0.1",
+    "Mongo" : "mongodb://localhost/IT-API2"
+  },
+  "db" : "IT-API2",
+  "pay" : {
+    "qiwi" : "...",
+    "qkey" : "..."
+  }
+
+}
