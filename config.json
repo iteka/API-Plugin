@@ -10,8 +10,8 @@
     "qkey" : "..."
   },
   "email": {
-    "api_key": "key-66547f90a65b40e0628c1474b7b9f037",
-    "domain": "sandboxe7727c98441749d3bfa4d60ee54ad86e.mailgun.org"
+    "api_key": "key-",
+    "domain": ".mailgun.org"
   }
 
 }
