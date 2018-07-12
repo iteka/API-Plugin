@@ -47,65 +47,65 @@ exports.QiviCheck = function(pid, consoleid, consolegroup, user) {
 
     Tick++;
     console.log('Tick', Tick);
-    if (Tick === 4) {
+    if (Tick === 3) {
       PayID = PayID;
     //  clearInterval(timerId);
     }
-    if (Tick === 5) {
-      Failed(ConsoleID, Group, User, PayID);
+    if (Tick === 4) {
+      SuccesPay(ConsoleID, Group, User, PayID);
       clearInterval(timerId);
     }
   }, 20000);
-}
 
-function SuccesPay(ConsoleID, Group, User, PayID) {
-  var Dates = new Date().toISOString();
-  var EndDate = new Date(new Date().getTime() + (30 * 60 * 1000));
+  function SuccesPay(ConsoleID, Group, User, PayID) {
+    var Dates = new Date().toISOString();
+    var EndDate = new Date(new Date().getTime() + (30 * 60 * 1000));
 
-  var Subscripts = {
-    "start_date": Dates,
-    "end_date": EndDate,
-    "active": true,
-    "console": ObjectId(ConsoleID),
-    "consolegroup": ObjectId(Group),
-    "user": ObjectId(User)
-  };
-  Models.createSubscript(Subscripts, function(err, doc) {
-        if (err) {
-          console.log(err);
-          return res.sendStatus(500);
-        }
-
-        //var payments = {"status": "success"};
-        Models.PaymentsUpdate(PayID, "success", function(err, result) {
+    var Subscripts = {
+      "start_date": Dates,
+      "end_date": EndDate,
+      "active": true,
+      "console": ObjectId(ConsoleID),
+      "consolegroup": ObjectId(Group),
+      "user": ObjectId(User)
+    };
+    Models.createSubscript(Subscripts, function(err, doc) {
           if (err) {
-            console.error('Payments', err);
+            console.log(err);
             return res.sendStatus(500);
           }
 
-          Models.UpdateVpncredentials(id, true, function(err, result) {
+          //var payments = {"status": "success"};
+          Models.PaymentsUpdate(PayID, "success", function(err, result) {
             if (err) {
-              console.log(err);
+              console.error('Payments', err);
               return res.sendStatus(500);
             }
 
-            console.log("UpdateVpncredentials: success");
+            Models.UpdateVpncredentials(id, true, function(err, result) {
+              if (err) {
+                console.log(err);
+                return res.sendStatus(500);
+              }
 
-          })
+              console.log("UpdateVpncredentials: success");
+
+            })
+          });
         });
-      });
-    }
-
-function Failed(ConsoleID, Group, User, PayID) {
-  Models.PaymentsUpdate(PayID, "failed", function(err, result) {
-    if (err) {
-      console.error('Payments', err);
-    }
-    Models.updateConsole(result.id, true, function(err, result) { // освобождаем консоль
-      if (err) {
-        console.error('updateConsole', err);
       }
-      console.info("UpdateConsole: OK")
+
+  function Failed(ConsoleID, Group, User, PayID) {
+    Models.PaymentsUpdate(PayID, "failed", function(err, result) {
+      if (err) {
+        console.error('Payments', err);
+      }
+      Models.updateConsole(result.id, true, function(err, result) { // освобождаем консоль
+        if (err) {
+          console.error('updateConsole', err);
+        }
+        console.info("UpdateConsole: OK")
+      });
     });
-  });
+  }
 }

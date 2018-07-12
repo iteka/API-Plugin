@@ -2,12 +2,16 @@
 
   "url": {
     "vpn" : "http://10.1.0.1",
-    "Mongo" : "mongodb://localhost/IT-API2"
+    "Mongo" : "mongodb://localhost/IT-API"
   },
-  "db" : "IT-API2",
+  "db" : "IT-API",
   "pay" : {
     "qiwi" : "...",
     "qkey" : "..."
+  },
+  "email": {
+    "api_key": "key-66547f90a65b40e0628c1474b7b9f037",
+    "domain": "sandboxe7727c98441749d3bfa4d60ee54ad86e.mailgun.org"
   }
 
 }

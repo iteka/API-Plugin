@@ -85,21 +85,6 @@ exports.UpdateVpncredentials = function (req, res) {
   })
 }
 
-exports.CreateNotifications = function (req, res) {
-  var Noti = {
-    "body": req.body.Notifi,
-    "user": ObjectId(req.body.id)
-  };
-    Models.Notifications(Noti, function (err, result) {
-      if (err){
-        console.log(err);
-        return res.sendStatus(500);
-      }
-      res.sendStatus(200);
-    });
-}
-
-
 exports.NotificationsFind = function (req, res) {
     Models.FindNotify(req.body.user, function (err, result) {
       if (err){
@@ -115,11 +100,46 @@ exports.NotificationsFind = function (req, res) {
     });
 }
 
+exports.FindUser = function (req, res) {
+    Models.FindUser(req.body.id, function (err, result) {
+      if(err){
+        console.log(err);
+        return err;
+      }
+      console.log("GOTOVO");
+      return result;
+    })
+}
 
+exports.CreateDemoHistory = function (req, res) {
+  var data = {
+    "fingerprint" : req.body.data,
+    "user" : ObjectId(req.body.user),
+    "createdAt": new Date().toISOString()
+  }
+    Models.CreateDemoHistory(data, function (err, result) {
+      if (err){
+        console.log(err);
+        return res.sendStatus(500);
+      }
+      return res.sendStatus(200);
+    });
+}
 
+exports.CheckDemoHistory = function (req, res) {
+    Models.CheckDemoHistory(req.body.user, function(err, doc) {
+      if (err) {
+        console.log(err);
+        return res.sendStatus(500);
+      }
+      if(doc !== null){
+        return  res.send(true);
+      }else {
+        return res.sendStatus(204);
+      }
 
-
-
+  });
+}
 
 
 //

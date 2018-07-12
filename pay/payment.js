@@ -3,9 +3,7 @@ var request = require('request');
 var Models = require('../models/models');
 var PayCheck = require('./paychek.js');
 var ObjectId = require('mongodb').ObjectID;
-require('console-info');
-require('console-warn');
-require('console-error');
+
 
 
 exports.Qiwi = function(req, res) {
