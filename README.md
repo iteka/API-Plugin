@@ -1,6 +1,6 @@
 ## API-Plugin
 
-##### __`Отправка Email По шаблонам`__
+##### Отправка Email По шаблонам
 - url: ./sendmailInfo
 
 ```js
@@ -13,16 +13,17 @@ POST: {
 ```
 <details>
 <summary>EMAIL</summary>
-<img src="/.git/msg.PNG" alt="markdown-preview GitHub style" style="max-width:100%; ">
+<img src="./msg.PNG" alt="markdown-preview GitHub style" style="max-width:100%; ">
 </details>
 
 ___
-##### __`Купить такую же подписку`__
+
+##### Купить такую же подписку
 - url: /extendpay
 
 ```js
 
-POST: { "user" : "...."}
+POST: { "subscriptions" : "...."}
 
 res.send(`https://qiwi.com/payment/form/99?extra%5B%27accou`);
 
@@ -30,7 +31,7 @@ res.send(`https://qiwi.com/payment/form/99?extra%5B%27accou`);
 ___
 
 
-##### __`Paymens Hhistory`__
+##### Paymens Hhistory
 - url: /paymenthistory
 
 ```js
@@ -83,10 +84,12 @@ res.send(JSON data);
 
 
 </details>
+
 ____
 
-##### __`Я хочу играть`__
-- /gotoplay
+
+##### Я хочу играть
+- url: /gotoplay
 
 
 ```js
@@ -101,7 +104,7 @@ res.sendStatus(200);
 ___
 
 
-##### __`DEMO доступ на 30минут`__
+##### DEMO доступ на 30минут
 - /createdemo
 ```js
 POST: { "consoleGroup" : "....", "uid" : "...." }
@@ -122,7 +125,7 @@ ___
 POST: { "email" : "...."}
 ```
 ___
-##### __`Оплата QIWI`__
+##### Оплата QIWI
 - url: /payqiwi
 
 ```js
