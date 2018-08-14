@@ -1,22 +1,21 @@
 ## API-Plugin
 
-##### Отправка Email По шаблонам
-- url: ./sendmailInfo
+### Кратко
 
-```js
-POST: {
-	    "user" : "5b2d0f0a112a44177ded0042",
-	    "msg" : "Режим суперсэмплирования \r\n Даже без 4KTV владельцы PS4 Pro могут.....",
-	    "header" : "Данные для входа в клиент"
-	   }
 
-```
-<details>
-<summary>EMAIL</summary>
-<img src="./msg.PNG" alt="markdown-preview GitHub style" style="max-width:100%; ">
-</details>
+'/createuser' // email = > jwt
+'/createdemo' // uid | consoleGroup => 200
 
-___
+'/gotoplay' //uid => 200
+
+'/createdemoHistory' // fprint | uid => 200
+'/CheckDemoHistory' // uid => true | false
+
+'/paymenthistory'  // uid = > name / price / status / active / subscriptions { start_date/ end_date }
+
+'/extendpay' //купить такую же подписку subscriptions => https://qiwi.com/payment/
+
+'/getovpkey' // User id => status, key
 
 ##### Купить такую же подписку
 - url: /extendpay
@@ -90,7 +89,7 @@ ____
 
 ##### Я хочу играть
 - url: /gotoplay
-
+POST: { "uid" : "...."}
 
 ```js
 FindUsersubscriptions(active: true)

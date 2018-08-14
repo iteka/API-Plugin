@@ -4,11 +4,30 @@ const Template = require('./template');
 var Models = require('../models/models');
 
 moment.locale("ru");
-var api_key = 'key-66547f90a65b40e0628c1474b7b9f037';
-var domain = 'sandboxe7727c98441749d3bfa4d60ee54ad86e.mailgun.org';
+
 var mailgun = require('mailgun-js')({apiKey: Config.email.api_key, domain: Config.email.domain});
 
+exports.Sendpwdlogin = function (param, cb) {
+    var tmpl = {
+       header: "Данные Учетной Записи",
+       login: param.login,
+       pwd: param.pwd,
+       msg: 'ссылка на лк'
+    };
+    var mail = {
+      from: 'kasper.php@gmail.com',
+      to: param.mail,
+      subject: 'IGROTEKA',
+      text: '',
+      html: Template.Inform(tmpl)  //`<b> ${req.body.message} </b>`
+    };
 
+      mailgun.messages().send(mail, function (error, body) {
+        cb(error, body);
+        console.log('errrrr', error);
+        console.log('body', body);
+      });
+}
 
 // exports.SendMail = function (req, res) {
 //   Models.FindUser(req.body.id, function (err, result) {
@@ -96,25 +115,4 @@ exports.SendInfomail = function (req, res) {
 //
 //   })
 // };
-//
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //

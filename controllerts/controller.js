@@ -1,5 +1,6 @@
 var Models = require('../models/models');
 var ObjectId = require('mongodb').ObjectID;
+var request = require('request');
 
 var Dates = new Date().toISOString();
 
@@ -113,8 +114,8 @@ exports.FindUser = function (req, res) {
 
 exports.CreateDemoHistory = function (req, res) {
   var data = {
-    "fingerprint" : req.body.data,
-    "user" : ObjectId(req.body.user),
+    "fingerprint" : req.body.fprint,
+    "user" : ObjectId(req.body.uid),
     "createdAt": new Date().toISOString()
   }
     Models.CreateDemoHistory(data, function (err, result) {
@@ -127,19 +128,39 @@ exports.CreateDemoHistory = function (req, res) {
 }
 
 exports.CheckDemoHistory = function (req, res) {
-    Models.CheckDemoHistory(req.body.user, function(err, doc) {
+    Models.CheckDemoHistory(req.body.uid, function(err, doc) {
       if (err) {
         console.log(err);
         return res.sendStatus(500);
       }
-      if(doc !== null){
+      if(doc !== null){//+
         return  res.send(true);
       }else {
-        return res.sendStatus(204);
+        return res.send(false);
       }
 
   });
 }
 
+/* VPN */
+exports.CreateVpnKey = function (req, res) {
+  Models.CreateVpnKey(req.body.uid, function (err, doc) {
+    if(err){
+     console.error(err);
+     return res.sendStatus(500);
+    }
+    res.send(doc);
+  })
+}
 
+exports.GetVpnKey = function (req, res) {
+  Models.GetVpnKey(req.body.uid, function (err, doc) {
+    if(err){
+      console.error(err);
+      return res.sendStatus(500);
+    }
+    var data = {"status": doc.active, "key": doc.vpnCredentials}
+    res.send(data);
+  })
+}
 //
