@@ -2,31 +2,46 @@ const Config = require('../config');
 const moment = require('moment');
 const Template = require('./template');
 var Models = require('../models/models');
+const nodemailer = require('nodemailer');
 
 moment.locale("ru");
 
-var mailgun = require('mailgun-js')({apiKey: Config.email.api_key, domain: Config.email.domain});
+let transporter = nodemailer.createTransport({
+    host: 'uashared07.twinservers.net',
+    port: 465,
+    secure: true, // true for 465, false for other ports
+    auth: {
+        user: 'remoteplay@igroteka.club', // generated ethereal user
+        pass: 'RemotePlay4777' // generated ethereal password
+    }
+});
+
 
 exports.Sendpwdlogin = function (param, cb) {
-    var tmpl = {
-       header: "Данные Учетной Записи",
-       login: param.login,
-       pwd: param.pwd,
-       msg: 'ссылка на лк'
-    };
-    var mail = {
-      from: 'kasper.php@gmail.com',
-      to: param.mail,
-      subject: 'IGROTEKA',
-      text: '',
-      html: Template.Inform(tmpl)  //`<b> ${req.body.message} </b>`
-    };
+  nodemailer.createTestAccount((err, account) => {
+      let tmpl = {
+          header: "Данные Учетной Записи",
+          login: param.login,
+          pwd: param.pwd,
+          msg: 'ссылка на лк'
+      };
+      let Mail = {
+          from: 'Remoteplay@igroteka.club', // sender address
+          subject: 'Данные Учетной Записи 👻 ✔', // Subject line
+          to: param.mail,
+          text: '',
+          html: Template.Inform(tmpl)  //`<b> ${req.body.message} </b>`
+        };
 
-      mailgun.messages().send(mail, function (error, body) {
-        cb(error, body);
-        console.log('errrrr', error);
-        console.log('body', body);
-      });
+        // send mail with defined transport object
+        transporter.sendMail(Mail, (error, info) => {
+            if (error) {
+                return cb(error);
+            }
+            cb(info.messageId);
+        });
+        cb('OK');
+   })
 }
 
 // exports.SendMail = function (req, res) {

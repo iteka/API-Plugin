@@ -9,8 +9,7 @@ module.exports = {
         cb(err, docs);
       })
     },
-
-    FindConsole: function(id, cb) { //поиск консолей с consoleGroup
+    FindConsole: function(id, cb) {
       db.get().collection('consoles').findOne({
         consoleGroup: ObjectId(id),
         available: true
@@ -18,13 +17,11 @@ module.exports = {
         cb(err, doc);
       })
     },
-
     createSubscript: function(subscript, cb) {
       db.get().collection('subscriptions').insert(subscript, function(err, docs) {
         cb(err, docs);
       })
     },
-
     UpdateSubscript: function(id, val, cb) {
       db.get().collection('subscriptions').updateOne({
           _id: ObjectId(id)
@@ -37,7 +34,6 @@ module.exports = {
           cb(err, docs);
         })
     },
-
     InfoSubscript: function(id, cb) {
       var query = {
         user: ObjectId(id)
@@ -45,17 +41,12 @@ module.exports = {
       db.get().collection('subscriptions').find(query).toArray(function(err, doc) {
         cb(err, doc);
       })
-      // db.get().collection('subscriptions').find({user: ObjectId(user)}).toArry(function (err, doc) {
-      //     cb(err, doc);
-      //   })
     },
-
     vpncredentials: function(vpn, cb) {
       db.get().collection('vpncredentials').insert(vpn, function(err, docs) {
         cb(err, docs);
       })
     },
-
     UpdateVpncredentials: function(id, val, cb) {
       db.get().collection('vpncredentials').updateOne({
           user: ObjectId(id)
@@ -69,7 +60,6 @@ module.exports = {
         }
       )
     },
-
     updateConsole: function(id, status, cb) {
       db.get().collection('consoles').updateOne({
           _id: ObjectId(id)
@@ -83,7 +73,6 @@ module.exports = {
         }
       )
     },
-
     CreateVpnKey: function(uid, cb) {
       try {
         var id = ObjectId(uid);
@@ -116,7 +105,6 @@ module.exports = {
         })
       })
     },
-
     GetVpnKey: function(id, cb) {
       try {
         var id = ObjectId(id);
@@ -129,13 +117,11 @@ module.exports = {
         cb(err, doc);
       })
     },
-
     Payments: function(payments, cb) {
       db.get().collection('payments').insert(payments, function(err, docs) {
         cb(err, docs);
       })
     },
-
     PaymentsUpdate: function(id, Pstatus, cb) {
       db.get().collection('payments').updateOne({
           _id: ObjectId(id)
@@ -149,7 +135,6 @@ module.exports = {
         }
       )
     },
-
     PaymenTtypes: function(id, cb) {
       db.get().collection('paymenttypes').findOne({
         _id: ObjectId(id)
@@ -157,7 +142,6 @@ module.exports = {
         cb(err, docs);
       })
     },
-
     FindUser: function(id, cb) {
       db.get().collection('users-permissions_user').findOne({
         _id: ObjectId(id)
@@ -165,7 +149,6 @@ module.exports = {
         cb(err, doc);
       })
     },
-
     CheckDemoHistory: function(id, cb) {
       db.get().collection('demohistory').findOne({
         user: ObjectId(id)
@@ -173,11 +156,17 @@ module.exports = {
         cb(err, docs);
       })
     },
-
     CreateDemoHistory: function(data, cb) {
       db.get().collection('demohistory').insert(data, function(err, doc) {
         console.log(err, doc);
         cb(err, doc);
+      })
+    },
+    paymentscheck: function (uid, cb) {
+      db.get().collection('payments').findOne({
+        user: ObjectId(uid)
+      }, function(err, docs) {
+        cb(err, docs);
       })
     }
 };

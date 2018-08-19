@@ -2,20 +2,21 @@ var request = require('request');
 var ObjectId = require('mongodb').ObjectID;
 const db = require('../controllerts/database');
 const Config = require('../config');
-var Models = require('../models/models');
-var Controller = require('../controllerts/controller');
+const Models = require('../models/models');
+const Controller = require('../controllerts/controller');
 const moment = require('moment');
 const config = require('../config');
-var PayCheck = require('../pay/paychek');
-var Dates = new Date().toISOString();
+const PayCheck = require('../pay/paychek');
+const Dates = new Date().toISOString();
 const Mail = require('../Email/email');
+const Loger = require('../log/loger');
 
 exports.CreateDemo = function(req, res) {
   var consoleGroup = req.body.consoleGroup,
     UID = req.body.uid;
   Models.CheckDemoHistory(UID, function(err, result) {
     if (err) {
-      console.log(err);
+      Loger.logger.error(err);
       return res.sendStatus(400);
     }
     if (result == null) {
@@ -28,25 +29,25 @@ exports.CreateDemo = function(req, res) {
   function ActivateDemo() {
     Models.FindConsole(consoleGroup, function(err, doc) { // FindConsole
       if (doc === null) {
-        console.log(err);
+        Loger.logger.error(err);
         return res.send('К сожалению все консоли заняты');
       }
-      console.log("FindConsole: OK");
+      Loger.logger.info("FindConsole: OK");
 
       Models.updateConsole(doc.id, false, function(err, result) { // резервируем консоль
         if (err) {
-          console.log(err);
+          Loger.logger.error(err);
           return res.sendStatus(500);
         }
-        console.log("резервируем консоль: OK");
+        Loger.logger.info("резервируем консоль: OK");
 
 
         Models.UpdateVpncredentials(UID, true, function(err, result) { // UpdateVpncredentials
           if (err) {
-            console.log(err);
+            Loger.logger.error(err);
             return res.sendStatus(500);
           }
-          console.log("UpdateVpncredentials: OK");
+          Loger.logger.info("UpdateVpncredentials: OK");
           var Dates = new Date().toISOString();
           var EndDate = new Date(new Date().getTime() + (30 * 60 * 1000));
           var Subscripts = {
@@ -59,10 +60,10 @@ exports.CreateDemo = function(req, res) {
           };
           Models.createSubscript(Subscripts, function(err, result) { // создаем subscriptions
             if (err) {
-              console.log(err);
+              Loger.logger.error(err);
               return res.sendStatus(500);
             }
-            console.log("Subscripts: OK");
+            Loger.logger.info("Subscripts: OK");
             return res.sendStatus(200);
           })
         })
@@ -106,7 +107,7 @@ exports.CreateUser = function(req, res) {
             //   console.error(error);
             //   return res.sendStatus(400);
             // }
-            //console.log(result);
+            //Loger.logger.info(result);
             res.send(body.jwt);
         //  })
         })
@@ -136,21 +137,19 @@ exports.GoToPlay = function(req, res) {
         }
       }, function(err, result) {
         if (err) {
-          console.log(err);
+          Loger.logger.error(err);
           return res.sendStatus(500);
         }
         if (result.result.nModified === 0) {
-          console.log("VPN Update : none");
+          Loger.logger.info("VPN Update : none");
         } else {
-          console.log("VPN Update : OK");
+          Loger.logger.info("VPN Update : OK");
         }
         res.sendStatus(200);
       })
     }
   })
 };
-
-
 
 exports.Paymenthistory = function Paymenthistory(req, res) {
   var user = {
@@ -218,7 +217,7 @@ exports.extend = function(req, res) { //купить такую же подпи�
     _id: ObjectId(req.body.subscriptions)
   }, function(err, doc) { //вытащить инфу о старорй подписке
     var user = doc.user;
-    console.log(user);
+    Loger.logger.info(user);
     Models.FindConsole(doc.consolegroup, function(err, result) { //проверить есть ли свободные консоли в консольгруппе / и вытащить инфу для payments
       if (result == null) {
         Error("ConsoleID Null");
@@ -247,7 +246,7 @@ exports.extend = function(req, res) { //купить такую же подпи�
             return res.sendStatus(500);
           }
           var PayID = result.ops[0]._id;
-          console.log(result);
+          Loger.logger.info(result);
           Models.PaymenTtypes(paytyp, function(err, result) { // вытащить инфу о товаре paytyp
             if (err) {
               Error("PaymenTtypes");
@@ -266,13 +265,7 @@ exports.extend = function(req, res) { //купить такую же подпи�
 
   function Error(info) {
     Models.updateConsole(ConsoleID, true, function(err, result) {
-      console.log(409, `Error ${info} - Консоль снята с резерва`);
+      Loger.logger.info(409, `Error ${info} - Консоль снята с резерва`);
     })
   }
-}
-
-exports.ChangeConsole = function(req, res) {
-
-
-
 }
