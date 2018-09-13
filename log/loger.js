@@ -1,4 +1,6 @@
+const fs      = require('fs');
 const winston = require('winston');
+
 exports.logger = winston.createLogger({
   level: 'info',
   format: winston.format.json(),
@@ -12,3 +14,15 @@ exports.logger = winston.createLogger({
     new winston.transports.File({ filename: './log/combined.log' })
   ]
 });
+
+module.exports.Logrout = {
+  error: (req, res) => {
+
+    let EJ = fs.readFileSync('./log/error.log', 'utf8');
+    res.json(EJ);
+  },
+  combined: (req, res) => {
+    let EJ = fs.readFileSync('./log/combined.log', 'utf8');
+    res.json(EJ);
+  }
+}

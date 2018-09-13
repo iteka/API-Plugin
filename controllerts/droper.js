@@ -1,5 +1,5 @@
 const db = require('./database');
-var ObjectId = require('mongodb').ObjectID;
+const ObjectId = require('mongodb').ObjectID;
 const config = require('../config');
 
 
@@ -7,8 +7,9 @@ var num = 1;
 
 setInterval(function ScanSubscript() {
   var isodate = new Date().toISOString();//Текущая дата
+
     console.log("OKdata" ,isodate);
-  db.connect(config.url.Mongo, function(err) {
+  db.connect((err) {
     if (err) {
       return console.log(err);
     }

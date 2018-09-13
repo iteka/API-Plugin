@@ -1,17 +1,16 @@
 const MongoClient = require('mongodb').MongoClient;
-const config = require('../config');
 var db = null;
 
-exports.connect = function(url, done) {
+exports.connect = function(done) {
   if (db) {
     return done();
   }
 
-  MongoClient.connect(url, function(err, database) {
+  MongoClient.connect(process.env.DB_HOST, function(err, database) {
     if (err) {
       return done(err);
     }
-    db = database.db(config.db);
+    db = database.db(process.env.DB_NAME);
     done();
   })
 }

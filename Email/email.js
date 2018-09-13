@@ -9,15 +9,18 @@ moment.locale("ru");
 let transporter = nodemailer.createTransport({
     host: 'uashared07.twinservers.net',
     port: 465,
-    secure: true, // true for 465, false for other ports
+  port: ,
+  secure: true,
     auth: {
         user: 'remoteplay@igroteka.club', // generated ethereal user
         pass: 'RemotePlay4777' // generated ethereal password
+        user: "@igroteka.club",
+        pass: ""
     }
 });
 
 
-exports.Sendpwdlogin = function (param, cb) {
+exports.Sendpwdlogin = function (param) {
   nodemailer.createTestAccount((err, account) => {
       let tmpl = {
           header: "Данные Учетной Записи",
@@ -35,12 +38,14 @@ exports.Sendpwdlogin = function (param, cb) {
 
         // send mail with defined transport object
         transporter.sendMail(Mail, (error, info) => {
+          console.log('infoinfoinfoinfo', info);
+          console.log('errorerrorerror ', error);
             if (error) {
-                return cb(error);
+                return console.log(error);
             }
-            cb(info.messageId);
+            console.log(info.accepted[0]);
+
         });
-        cb('OK');
    })
 }
 

@@ -1,19 +1,21 @@
-var request = require('request');
-var ObjectId = require('mongodb').ObjectID;
-const db = require('../controllerts/database');
-const Config = require('../config');
-const Models = require('../models/models');
+const request    = require('request');
+const ObjectId   = require('mongodb').ObjectID;
+const db         = require('../controllerts/database');
+const Config     = require('../config');
+const Models     = require('../models/models');
 const Controller = require('../controllerts/controller');
-const moment = require('moment');
-const config = require('../config');
-const PayCheck = require('../pay/paychek');
-const Dates = new Date().toISOString();
-const Mail = require('../Email/email');
-const Loger = require('../log/loger');
+const moment     = require('moment');
+const config     = require('../config');
+const PayCheck   = require('../pay/paychek');
+const Dates      = new Date().toISOString();
+const Mail       = require('../Email/email');
+const Loger      = require('../log/loger');
+const Urss       = require('../user/service');
 
 exports.CreateDemo = function(req, res) {
   var consoleGroup = req.body.consoleGroup,
     UID = req.body.uid;
+
   Models.CheckDemoHistory(UID, function(err, result) {
     if (err) {
       Loger.logger.error(err);
@@ -32,16 +34,12 @@ exports.CreateDemo = function(req, res) {
         Loger.logger.error(err);
         return res.send('К сожалению все консоли заняты');
       }
-      Loger.logger.info("FindConsole: OK");
-
       Models.updateConsole(doc.id, false, function(err, result) { // резервируем консоль
         if (err) {
           Loger.logger.error(err);
           return res.sendStatus(500);
         }
         Loger.logger.info("резервируем консоль: OK");
-
-
         Models.UpdateVpncredentials(UID, true, function(err, result) { // UpdateVpncredentials
           if (err) {
             Loger.logger.error(err);
@@ -72,50 +70,29 @@ exports.CreateDemo = function(req, res) {
   }
 }
 
-exports.CreateUser = function(req, res) {
-  function genpass() {
-    var pass = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for (var i = 0; i < 8; i++)
-      pass += possible.charAt(Math.floor(Math.random() * possible.length));
-    return pass;
-  } //герерация пароля
-  var passwd = genpass();
-  var uname = req.body.email.split('@')[0];
-  request({
-      url: `http://162.247.13.110:1337/auth/local/register`,
-      method: "POST",
-      json: {
-        "username": `${req.body.email}`,
-        "email": `${req.body.email}`,
-        "password": passwd
-      }
-    },
-    function(err, httpResponse, body) {
-      if (err) {
-        return res.sendStatus(400);
-      }
-      if (body.message == undefined) {
-        Models.CreateVpnKey(body.user._id, function(err, doc) {
-          if (err) {
-            console.error(err);
-            return res.sendStatus(400);
-          }
-          var mailparam = {login: uname, mail:req.body.email, pwd:passwd }
-        //  Mail.Sendpwdlogin(mailparam, function (error, result) {
-            // if(error){
-            //   console.error(error);
-            //   return res.sendStatus(400);
-            // }
-            //Loger.logger.info(result);
-            res.send(body.jwt);
-        //  })
-        })
-      } else {
-        console.error(body.message);
-        return res.send(body.message);
-      }
-    })
+exports.CreateUser = async (req, res, next) => {
+  let username = req.body.email.split("@")[0];
+  let User_date = {
+      first_name: username,
+      last_name : username,
+      username  : username,
+      photo     : "",
+      socid     : req.body.email,
+      email     : req.body.email,
+      provider  : "local"
+  };
+  Urss.UserReg(User_date, (err, result) => {
+    if(err || err == "E11000"){
+      return res.send(400, {message: "Email is already taken."});
+    }
+    console.log(result);
+    //Controller.CreateVpnKey(result.ops[0]._id, (err, result) => {
+    //  if(err){
+    //    return next(err);
+    //  }
+      res.send(result);
+    //})
+  })
 }
 
 exports.GoToPlay = function(req, res) {

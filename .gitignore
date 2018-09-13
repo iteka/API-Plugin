@@ -1,0 +1,9 @@
+.env
+APIUPdate.zip
+API.zip
+user/providers.json
+config.json
+node_modules
+.node_history
+
+.zip
